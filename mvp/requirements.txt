@@ -1,3 +1,4 @@
+joblib
 Markdown==3.4.3
 markdown-it-py==2.2.0
 MarkupSafe==2.1.2
@@ -10,6 +11,8 @@ opt-einsum==3.3.0
 packaging==23.1
 pandas==2.0.1
 pandas-profiling==3.2.0
+rdkit
+streamlit_shap
 streamlit==1.22.0
 streamlit-apexjs==0.0.3
 streamlit-card==0.0.4
