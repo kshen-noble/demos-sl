@@ -14,6 +14,16 @@ from numerize.numerize import numerize
 import mychem
 
 
+# ===== Session Management =====
+if "data" not in st.session_state:
+    st.session_state["data"] = pd.read_csv("data/chemical_only_3output.csv")
+
+if "model" not in st.session_state:
+    model_name = "model3output"
+    with open(f"data/{model_name}.joblib", 'rb') as f:
+        st.session_state["model"] = joblib.load(f)
+
+
 # ===== Main Page =====
 st.set_page_config(page_title="Dashboard",page_icon="⚛",layout="wide")
 st.header("Polyurethane Design")
@@ -31,10 +41,9 @@ theme_plotly = 'streamlit' # None or streamlit
 
  
 #load data and model
-df = pd.read_csv("data/chemical_only_3output.csv")
-model_name = "model3output"
-with open(f"data/{model_name}.joblib", 'rb') as f:
-    predictor = joblib.load(f)
+df = st.session_state["data"]
+predictor = st.session_state["model"]
+
 
 
 #sampInput = X_test[1:2].values
@@ -173,6 +182,9 @@ def page_Design():
         st.image(svg2)
 #graphs
 
+def page_Home():
+    pass 
+
 def page_Analyses():
     pass
 
@@ -231,26 +243,26 @@ def graphs():
 
 
 def sideBar():
-
- with st.sidebar:
-    selected=option_menu(
-        menu_title="Main Menu",
-        options=["Home","Charting", "Live Design", "Analyses"],
-        icons=["house","graph-up","eye"],
-        menu_icon="cast",
-        default_index=0
-    )
-
- if selected=="Live Design":
-    #st.subheader(f"Page: {selected}")
-    page_Design()
-    # graphs()
- if selected == "Charting":
-    page_Charting()
- if selected=="Analyses":
-    #st.subheader(f"Page: {selected}")
-    page_Analyses()
-    # graphs()
+    with st.sidebar:
+        selected=option_menu(
+            menu_title="Main Menu",
+            options=["Home","Charting", "Live Design", "Analyses"],
+            icons=["clipboard-data-fill","graph-up","eye"], #house
+            menu_icon="cast",
+            default_index=0
+        )
+    if selected == "Home":
+        page_Home()
+    if selected=="Live Design":
+        #st.subheader(f"Page: {selected}")
+        page_Design()
+        # graphs()
+    if selected == "Charting":
+        page_Charting()
+    if selected=="Analyses":
+        #st.subheader(f"Page: {selected}")
+        page_Analyses()
+        # graphs()
 
 sideBar()
 
